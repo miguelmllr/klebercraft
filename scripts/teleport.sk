@@ -1,0 +1,247 @@
+command /spawn:
+   usage: /spawn
+   aliases: /hub, /lobby
+   executable by: players
+   trigger:
+      teleport player to location at 160.5, 62, -314.5 in world "minigames"
+      send " "
+      send "&7[&eKléberCraft&7] &fBienvenue au hub."
+      send " "
+      
+      
+Command /games:
+   aliases: /game, /jeu, /jeux
+   trigger:
+      wait 2 tick
+      open chest with 6 rows named "&eJeux" to player
+      wait 1 tick
+      format slot 0 of player with black stained glass pane  named " " to be unstealable #VERRE NOIR
+      format slot 1 of player with black stained glass pane  named " " to be unstealable
+      format slot 2 of player with black stained glass pane  named " " to be unstealable
+      format slot 3 of player with black stained glass pane  named " " to be unstealable
+      format slot 4 of player with player head with nbt "{SkullOwner:%player%}" named "&r&lBonjour, %player%" with lore "&7Clique pour voir tes stats" to close then run [make player execute command "/stats"]
+      format slot 5 of player with black stained glass pane  named " " to be unstealable
+      format slot 6 of player with black stained glass pane  named " " to be unstealable
+      format slot 7 of player with black stained glass pane  named " " to be unstealable
+      format slot 8 of player with black stained glass pane  named " " to be unstealable
+      format slot 9 of player with black stained glass pane  named " " to be unstealable
+      format slot 17 of player with black stained glass pane  named " " to be unstealable
+      format slot 18 of player with black stained glass pane  named " " to be unstealable
+      format slot 26 of player with black stained glass pane  named " " to be unstealable
+      format slot 27 of player with black stained glass pane  named " " to be unstealable
+      format slot 35 of player with black stained glass pane  named " " to be unstealable
+      format slot 36 of player with black stained glass pane  named " " to be unstealable
+      format slot 44 of player with black stained glass pane  named " " to be unstealable
+      format slot 45 of player with black stained glass pane  named " " to be unstealable
+      format slot 46 of player with black stained glass pane  named " " to be unstealable
+      format slot 47 of player with black stained glass pane  named " " to be unstealable
+      format slot 48 of player with black stained glass pane  named " " to be unstealable
+      format slot 49 of player with black stained glass pane  named " " to be unstealable
+      format slot 50 of player with black stained glass pane  named " " to be unstealable
+      format slot 51 of player with black stained glass pane  named " " to be unstealable
+      format slot 52 of player with black stained glass pane  named " " to be unstealable
+      format slot 53 of player with black stained glass pane  named " " to be unstealable
+      format slot 39 of player with elytra named "&r&7Parcours d'Élytras" to run [make player execute command "/tpelytra"]
+      format slot 21 of player with shiny hay block named "&r&eHideAndSeek" to run [make player execute command "/tphas"]
+      format slot 30 of player with oak log named "&r&2BuildBattle" to run [make player execute command "/tpbb"]
+      format slot 22 of player with shiny iron sword named "&r&5Hunger Games" to run [make player execute command "/tphg"]
+      format slot 32 of player with diamond shovel named "&r&fSpleef" to run [make player execute command "/tpspleef"]
+      format slot 20 of player with shiny iron axe named "&r&cMurder" to run [make player execute command "/tpmurder"]
+      format slot 41 of player with emerald block named "&r&bDés à Coudre" to run [make player execute command "/tpdac"]
+      format slot 24 of player with shiny player head with nbt "{SkullOwner:{Id:58404a7e-a14d-4b48-b97c-cdb98a8e1018,Properties:{textures:[{Value:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDFiODMwZWI0MDgyYWNlYzgzNmJjODM1ZTQwYTExMjgyYmI1MTE5MzMxNWY5MTE4NDMzN2U4ZDM1NTU1ODMifX19}]}}}" named "&r&aGuess Who" to run [make player execute command "/tpgw"]
+      format slot 39 of player with oak boat named "&r&6Course de bateaux" to run [make player execute command "/tpbateaux"]
+      format slot 23 of player with shiny red bed named "&r&3BedWars" to run [make player execute command "/tpbedwars"]
+      format slot 40 of player with white stained glass named "&rParkour" to run [make player execute command "/tppk"]
+      format slot 31 of player with player head with nbt "{SkullOwner:{Id:4c377f2c-173c-459c-be2a-e6417b751a7c,Properties:{textures:[{Value:eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGVmNDg3NGViMDUwYTNkM2U0NmY2OWFlNDBjM2I1OWEzNTk2ZjcxNjY0YTBkYjZjYTYwMGQ1YzY3ZjQ3ZTQifX19}]}}}" named "&r&lHub" to run [make player execute command "/hub"]
+      if player has permission "kc.staff":
+         format slot 13 of player with beacon named "&4Staff" to run [make player execute command "/minecraft:tp 78.5 71 -245.5"]
+         
+
+Command /stats:
+   aliases: /statistiques
+   trigger:
+      set {has_played} to placeholder "hideandseek_games_played"
+      set {has_wins} to placeholder "hideandseek_wins"
+      set {has_kills} to placeholder "hideandseek_hiders_killed"
+      set {buildbattle_wins} to placeholder "buildbattle_wins"
+      set {buildbattle_played} to placeholder "buildbattle_games_played"
+      set {buildbattle_placed} to placeholder "buildbattle_blocks_placed"
+      set {hungergames_played} to placeholder "hungergames_lb_games_player" parsed as number
+      set {hungergames_wins} to placeholder "hungergames_lb_wins_player" parsed as number
+      set {hungergames_kills} to placeholder "hungergames_lb_kills_player"
+      set {hungergames_deaths} to placeholder "hungergames_lb_deaths_player"
+      set {hungergames_loses} to {hungergames_played} - {hungergames_wins}
+      set {spleef_wins} to placeholder "spleef_wins" parsed as number
+      set {spleef_loses} to placeholder "spleef_loses" parsed as number
+      set {spleef_played} to {spleef_wins} + {spleef_loses}
+      set {murder_played} to placeholder "murdermystery_games_played"
+      set {murder_wins} to placeholder "murdermystery_wins"
+      set {murder_loses} to placeholder "murdermystery_loses"
+      set {murder_kills} to placeholder "murdermystery_kills"
+      set {murder_deaths} to placeholder "murdermystery_deaths"
+      set {dac_wins} to placeholder "dac_wins" parsed as number
+      set {dac_loses} to placeholder "dac_loses" parsed as number
+      set {dac_played} to {dac_wins} + {dac_loses}
+      set {bedwars_played} to placeholder "bedwars_stats_games"
+      set {bedwars_wins} to placeholder "bedwars_stats_wins"
+      set {bedwars_loses} to placeholder "bedwars_stats_loses"
+      set {bedwars_beds} to placeholder "bedwars_stats_destroyed_beds"
+      set {bedwars_kills} to placeholder "bedwars_stats_kills"
+      set {bedwars_deaths} to placeholder "bedwars_stats_deaths"
+      wait 2 tick
+      open chest with 6 rows named "&2Statistiques" to player
+      wait 1 tick
+      format slot 0 of player with gray stained glass pane  named " " to be unstealable #VERRE NOIR
+      format slot 1 of player with gray stained glass pane  named " " to be unstealable
+      format slot 2 of player with gray stained glass pane  named " " to be unstealable
+      format slot 3 of player with gray stained glass pane  named " " to be unstealable
+      format slot 4 of player with player head with nbt "{SkullOwner:%player%}" named "&r&lPrécédent" with lore "&7Retourner aux jeux" to close then run [make player execute command "/games"]
+      format slot 5 of player with gray stained glass pane  named " " to be unstealable
+      format slot 6 of player with gray stained glass pane  named " " to be unstealable
+      format slot 7 of player with gray stained glass pane  named " " to be unstealable
+      format slot 8 of player with gray stained glass pane  named " " to be unstealable
+      format slot 9 of player with gray stained glass pane  named " " to be unstealable
+      format slot 17 of player with gray stained glass pane  named " " to be unstealable
+      format slot 18 of player with gray stained glass pane  named " " to be unstealable
+      format slot 26 of player with gray stained glass pane  named " " to be unstealable
+      format slot 27 of player with gray stained glass pane  named " " to be unstealable
+      format slot 35 of player with gray stained glass pane  named " " to be unstealable
+      format slot 36 of player with gray stained glass pane  named " " to be unstealable
+      format slot 44 of player with gray stained glass pane  named " " to be unstealable
+      format slot 45 of player with gray stained glass pane  named " " to be unstealable
+      format slot 46 of player with gray stained glass pane  named " " to be unstealable
+      format slot 47 of player with gray stained glass pane  named " " to be unstealable
+      format slot 48 of player with gray stained glass pane  named " " to be unstealable
+      format slot 49 of player with gray stained glass pane  named " " to be unstealable
+      format slot 50 of player with gray stained glass pane  named " " to be unstealable
+      format slot 51 of player with gray stained glass pane  named " " to be unstealable
+      format slot 52 of player with gray stained glass pane  named " " to be unstealable
+      format slot 53 of player with gray stained glass pane  named " " to be unstealable
+      format slot 21 of player with hay block named "&r&eHideAndSeek" with lore "&r&6Parties jouées : %{has_played}%" and "&r&aVictoires : %{has_wins}%" and "&r&3Cachés tués : %{has_kills}%" to be unstealable
+      format slot 24 of player with oak log named "&r&2BuildBattle" with lore "&r&6Parties jouées : %{buildbattle_played}%" and "&r&aVictoires : %{buildbattle_wins}%" and "&r&7Blocs placés : %{buildbattle_placed}%" to be unstealable
+      format slot 22 of player with iron sword named "&r&5Hunger Games" with lore "&r&6Parties jouées : %{hungergames_played}%" and "&r&aVictoires : %{hungergames_wins}%" and "&r&4Défaites : %{hungergames_loses}%" and "&r&2Kills : %{hungergames_kills}%" and "&r&cMorts : %{hungergames_deaths}%" to be unstealable
+      format slot 32 of player with diamond shovel named "&r&fSpleef" with lore "&r&6Parties jouées : %{spleef_played}%" and "&r&aVictoires : %{spleef_wins}%" and "&r&4Défaites : %{spleef_loses}%" to be unstealable
+      format slot 20 of player with iron axe named "&r&cMurder" with lore "&r&6Parties jouées : %{murder_played}%" and "&r&aVictoires : %{murder_wins}%" and "&r&4Défaites : %{murder_loses}%"  and "&r&2Kills : %{murder_kills}%" and "&r&cMorts : %{murder_deaths}%" to be unstealable
+      format slot 30 of player with emerald block named "&r&bDés à Coudre" with lore "&r&6Parties jouées : %{dac_played}%" and "&r&aVictoires : %{dac_wins}%" and "&r&4Défaites : %{dac_loses}%" to be unstealable
+      format slot 23 of player with shiny red bed named "&r&3BedWars" with lore "&r&6Parties jouées : %{bedwars_played}%" and "&r&aVictoires : %{bedwars_wins}%" and "&r&4Défaites : %{bedwars_loses}%" and "&r&fLits détruits : %{bedwars_beds}%" and "&r&2Kills : %{bedwars_kills}%" and "&r&cMorts : %{bedwars_deaths}%" to be unstealable
+
+#JEUX
+
+command /tplg:
+   trigger:
+      teleport player to location at 124.5, 64, -360.5 in world "minigames"
+command /tpcochons:
+   trigger:
+      teleport player to location at 199.5, 72, -274.5 in world "minigames"
+command /tpelytra:
+   trigger:
+      teleport player to location at 191, 254, -121 in world "minigames"
+command /tpbedwars:
+   trigger:
+      teleport player to location at 1000.5, 93, 1000.5 in world "BedWars"
+command /tphas:
+   trigger:
+      connect player to server "JEUX2"
+command /tpbb:
+   trigger:
+      teleport player to location at -75.0, 77, 38.0 in world "buildbattle"
+command /tpdac:
+   trigger:
+      connect player to server "JEUX3"
+      make server execute command "sync player %player% dac join Kraken"
+command /tpmurder:
+   trigger:
+      connect player to server "JEUX1"
+command /tpspleef:
+   trigger:
+      connect player to server "JEUX4"
+      make server execute command "sync player %player% spleef join Spleef"
+command /spleefshovel:
+   trigger:
+      give diamond shovel named "&bSpleef" to player
+command /tpbateaux:
+   trigger:
+      connect player to server "JEUX4"
+      make server execute command "sync console JEUX4 racing start Glace"
+      make server execute command "sync player %player% racing join Glace"
+command /tphg:
+   trigger:
+      connect player to server "JEUX4"
+      make server execute command "sync player %player% hg join Biomes"
+      wait 1 second
+      make server execute command "sync player %player% kit"
+command /tppk:
+   trigger:
+      teleport player to location at 1000.5, 100.00, 1999.5 in world "Parkour"
+command /tpgw:
+   trigger:
+      teleport player to location at -1986.5, 70, -974.5 in world "minigames"
+command /tpvd:
+   trigger:
+      connect player to server "JEUX3"
+      wait 1 second
+      make server execute command "sync player %player% vd join Forteresse"
+
+command /tpvkb:
+   trigger:
+      teleport player to location at 99801, 63, 999751 in world "minigames"
+#COMMANDE DE TP
+
+command /tp [<player>] [<player>]:
+    trigger:
+        if argument 1 is set:
+            if argument 2 is set:
+                if player has permission "kc.staff":
+                    teleport arg-1 to arg-2
+                    message "&7[&eKléberCraft&7] &f%arg 1% &2à été téléporté à &f%arg 2%&2."
+                    message "&7[&eKléberCraft&7] &2Tu as été téléporté à &f%arg 2%&2." to arg-1
+                if player doesn't have permission "kc.staff":
+                    message "&7[&eKléberCraft&7] &cTu n'as pas la permission."
+            else:
+                if player has permission "kc.staff":
+                    teleport player to arg-1
+                    message "&7[&eKléberCraft&7] &2Tu as été téléporté à &f%arg 1%&2."
+                    message "&7[&eKléberCraft&7] &f%player%&2 s'est téléporté à toi." to arg-1
+                if player doesn't have permission "kc.staff":
+                    message "&7[&eKléberCraft&7] &cTu n'as pas la permission."
+        else:
+            if player has permission "kc.staff":
+                message "&7[&eKléberCraft&7] &2Tu n'as pas précisé de joueur."
+            if player doesn't have permission "kc.staff":
+                message "&7[&eKléberCraft&7] &cTu n'as pas la permission."
+                
+command /tpa <player>:
+    trigger:
+        set {tpa.%argument 1%} to player
+        send "&7[&eKléberCraft&7] &r&l%{tpa.%argument 1%}% &7souhaite se téléporter à toi." to arg-1
+        json("%arg 1%", "&7» &a/tpaccept &7pour accepter||cmd:/tpaccept||ttp:&fClique pour accepter")
+        json("%arg 1%", "&7» &c/tpdeny &7pour refuser||cmd:/tpdeny||ttp:&fClique pour refuser")
+        message "&7[&eKléberCraft&7] &eTa demande a été envoyée." to player
+        wait 30 seconds
+        loop all players:
+            if {tpa.%arg 1%} exists:
+                send "&7[&eKléberCraft&7] &7Demande de téléportation expirée." to loop-player 
+                delete {tpa.%player%}
+        
+
+command /tpaccept:
+    trigger:
+        if {tpa.%player%} exists:
+            teleport {tpa.%player%} to location of player
+            send "&7[&eKléberCraft&7] &r&l%player% &7s'est téléporté à toi." to player 
+            send "&7[&eKléberCraft&7] &7Tu as été téléporté à &r&l%{tpa.%player%}%" to {tpa.%player%} 
+            delete {tpa.%player%} 
+        else:
+            message "&7[&eKléberCraft&7] &7Tu n'as aucune demande en cours." to player 
+
+command /tpdeny:
+    trigger:
+        if {tpa.%player%} exists:
+            send "&7[&eKléberCraft&7] &7Ta demande a été déclinée." to {tpa.%player%} 
+            delete {tpa.%player%} 
+        else:
+            message "&7[&eKléberCraft&7] &7Tu n'as aucune demande en cours." to player 
+            
+            
+on disconnect:
+    delete {tpa.%player%}
