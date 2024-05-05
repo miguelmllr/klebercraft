@@ -1,0 +1,200 @@
+#        OPTIONS        #
+
+options:
+   prefix: &7[&eKC&9Modo&7]&9
+
+#        EVENTS        #
+
+on any move:
+   if {freeze.%player%} is true:
+      cancel event
+
+on quit:
+   if {ban.%player%} is true:
+      set quit message to ""
+   if {tban.%player%.true} is true:
+      set quit message to ""
+
+#        CMD        #
+         
+command /freeze [<player>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 1 is set:
+         if arg 1 is a player:
+            set {freeze.%arg 1%} to true
+            send "{@prefix} Le joueur &f&l%arg 1% &9est freeze."
+            
+command /unfreeze [<player>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 1 is set:
+         if arg 1 is a player:
+            set {freeze.%arg 1%} to false
+            send "{@prefix} Le joueur &f&l%arg 1% &9n'est plus freeze."
+            
+command /kick [<player>] [<text>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 2 is not set:
+         send "{@prefix} Précise la raison du kick."
+         stop trigger
+      if arg 1 is set:
+         if arg 1 is a player:
+            if arg 2 is set:
+               kick arg 1 due to "&c&lTu as été expulsé par %player%.%nl%&cRaison : %arg 2%"
+               send "{@prefix} Tu as kick &f&l%arg 1% &9 pour : &f&l%arg 2%"
+      loop all players:
+         if player has permission "kc.staff":
+            send "{@prefix} &8%player% as kick &7&l%arg 1% &8 pour : &7&l%arg 2%" to loop-player
+               
+command /mute [<player>] [<text>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 2 is not set:
+         send "{@prefix} Précise le temps du mute."
+         stop trigger
+      if arg 1 is a player:
+         send "{@prefix} Tu as mute &f&l%arg 1% &9pendant &f&l%arg 2% &9minutes."
+         set {mute.%arg 1%} to true
+         set {tmute.%arg 1%} to arg 2
+         wait "%arg-2% minutes" parsed as timespan
+         set {mute.%arg 1%} to false
+      loop all players:
+         if player has permission "kc.staff":
+            send "{@prefix} Tu as mute &f&l%arg 1% &9pendant &f&l%arg 2% &9minutes." to loop-player
+command /unmute [<player>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 1 is set: 
+         if arg 1 is a player:
+            set {mute.%arg 1%} to false
+            send "{@prefix} Tu as unmute &f&l%arg 1%&9."
+            
+command /ban [<player>] [<text>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 2 is not set:
+         send "{@prefix} Précise la raison du ban."
+         stop trigger
+      if arg 1 and arg 2 is set:
+         kick arg 1 due to "&c&lTu as été ban par %player%.%nl%&cRaison : %arg 2%"
+         wait 1 ticks
+         send "{@prefix} Tu as ban &f&l%arg 1% &9 pour : &f&l%arg 2%"
+         set {ban.%arg 1%} to true
+         set {raison.%arg 1%} to arg 2
+         set {banner.%arg 1%} to player
+               
+command /pardon [<offline player>]:
+   aliases: /unban
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 1 is set:
+         set {ban.%arg 1%} to false
+         set {tban.%arg 1%.true} to false
+         send "{@prefix} Tu as unban &f&l%arg 1%&9."
+         
+command /tempban [<offline player>] [<text>] [<text>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      if arg 1 is set:
+         if arg 2 is not set:
+            send "{@prefix} Précise le temps du ban."
+            stop trigger
+         if arg 2 is set:
+            if arg 3 is not set:
+               send "{@prefix} Précise la raison du ban."
+            else:
+               kick arg 1 due to "&cTu as été ban par &c&l%player% pour &4&l%arg 2% jours&c&l.%nl%&4&lRaison : %arg 3%"
+               send "{@prefix} Tu as ban &f&l%arg 1% &9pendant &f&l%arg 2% &9jours pour : &f&l%arg 3%"
+               set {tempban.%arg 1%} to arg 2
+               set {raison.tban.%arg 1%} to arg 3
+               set {tban.%arg 1%.true} to true
+               set {date.tban.%arg 1%} to now
+               wait "%arg-2% days" parsed as timespan
+               set {tban.%arg 1%.true} to false
+               
+command /warn [<player>] [<text>]:
+   permission: kc.moderateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      else:
+         if arg 1 is a player:
+            if arg 2 is set:
+               add 1 to {warn.number.%arg 1%}
+               wait 1 ticks
+               send "{@prefix} &9Tu as envoyé un avertissement à &f&l%arg 1% &9pour : %arg 2%"
+               send "&7[&eKléberCraft&7] &c&lTu as reçu un avertissement de &9%player% &c&l!" to arg 1
+               send "&cRaison : %arg 2%" to arg 1
+            else:
+               send "{@prefix} Précise la raison."
+
+#   TNT   #
+place of tnt:
+   if world is "bedwars" or "survie" or "survie_nether" or "survie_the_end":
+      stop
+   else:
+      cancel the event
+   
+on explode:
+   if world is "bedwars" or "survie" or "survie_nether" or "survie_the_end":
+      stop
+   else:
+      cancel the event               
+
+command /setami [<player>]:
+   permission: kc.fondateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      else:
+         if arg 1 is a player:
+            make player execute command "lp user %arg 1% parent add ami"
+
+command /unsetami [<player>]:
+   permission: kc.fondateur
+   permission message: &7[&eKléberCraft&7] Tu n'as pas la permission !
+   trigger:
+      if arg 1 is not set:
+         send "{@prefix} Précise le joueur."
+         stop trigger
+      else:
+         if arg 1 is a player:
+            make player execute command "lp user %arg 1% parent remove ami"
