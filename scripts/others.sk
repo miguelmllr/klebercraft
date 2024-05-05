@@ -1,0 +1,117 @@
+on join:
+   if player has permission "kc.staff":
+      wait 100 ticks
+      set player's game mode to creative
+   else:
+      make player execute command "hub"
+      wait 50 ticks
+      set player's game mode to adventure
+
+command /plugins:
+   trigger:
+      if player has permission "kc.admin":
+         make player execute command "/bukkit:plugins"
+      else:
+         send "Plugins (3): &aKléberCraftCore&f, &aKléberCraftGames&f, &aKléberCraftPerms"
+command /pl:
+   trigger:
+      if player has permission "kc.admin":
+         make player execute command "/bukkit:plugins"
+      else:
+         send "Plugins (3): &aKléberCraftCore&f, &aKléberCraftGames&f, &aKléberCraftPerms"
+         
+command /head [<text>]:
+   trigger:
+      make player execute command "give %player% minecraft:player_head{SkullOwner:%arg 1%}"
+		 
+on chat:
+   if player does not have permission "kc.mention":
+      loop all players:
+         if message contains "%loop-player%":
+            replace all "%loop-player%" with "%loop-player%&r" in message
+            stop
+   if player has permission "kc.mention":
+      loop all players:
+         if message contains "%loop-player%":
+            replace all "%loop-player%" with "&6&l@%loop-player%&r" in message  # If you want to change the chat Color, Change the part that say &6&l@ in this line.
+
+Command /kit:
+   trigger:
+      wait 20 tick
+      open chest with 3 rows named "&l&5Kits" to player
+      wait 1 tick
+      if player has permission "kc.vip":
+         format slot 2 of player with bow named "Archer" to run [make player execute command "/hg kit Archer"]
+         format slot 3 of player with iron chestplate named "Chevalier" to run [make player execute command "/hg kit Chevalier"]
+         format slot 4 of player with golden sword named "Samouraï" to run [make player execute command "/hg kit Samourai"]
+         format slot 5 of player with feather named "Aigle" to run [make player execute command "/hg kit Aigle"]
+         format slot 6 of player with netherite hoe named "Faucheuse" to run [make player execute command "/hg kit Faucheuse"]
+         format slot 11 of player with potion named "Espion" to run [make player execute command "/hg kit Espion"]
+         format slot 12 of player with fishing rod named "Viking" to run [make player execute command "/hg kit Viking"]
+         format slot 13 of player with totem of undying named "Alchimiste" to run [make player execute command "/hg kit Alchimiste"]
+         format slot 14 of player with apple named "Voleur" to run [make player execute command "/hg kit Voleur"]
+         format slot 15 of player with iron axe named "Meurtrier" to run [make player execute command "/hg kit Meurtrier"]
+         format slot 21 of player with flint and steel named "[V.I.P] Pyromane" to run [make player execute command "/hg kit Pyromane"]
+         format slot 22 of player with trident named "[V.I.P] Poséidon" to run [make player execute command "/hg kit Poseidon"]
+         format slot 23 of player with rotten flesh named "[V.I.P] Survivant" to run [make player execute command "/hg kit Survivant"]
+      else:
+         format slot 2 of player with bow named "Archer" to run [make player execute command "/hg kit Archer"]
+         format slot 3 of player with iron chestplate named "Chevalier" to run [make player execute command "/hg kit Chevalier"]
+         format slot 4 of player with golden sword named "Samouraï" to run [make player execute command "/hg kit Samourai"]
+         format slot 5 of player with feather named "Aigle" to run [make player execute command "/hg kit Aigle"]
+         format slot 6 of player with netherite hoe named "Faucheuse" to run [make player execute command "/hg kit Faucheuse"]
+         format slot 11 of player with potion named "Espion" to run [make player execute command "/hg kit Espion"]
+         format slot 12 of player with fishing rod named "Viking" to run [make player execute command "/hg kit Viking"]
+         format slot 13 of player with totem of undying named "Alchimiste" to run [make player execute command "/hg kit Alchimiste"]
+         format slot 14 of player with apple named "Voleur" to run [make player execute command "/hg kit Voleur"]
+         format slot 15 of player with iron axe named "Meurtrier" to run [make player execute command "/hg kit Meurtrier"]
+      
+      
+command /help [<text>]:
+   aliases: /aide
+   trigger:
+      if player has permission "kc.staff":
+         if arg 1 is not set:
+            send "&8---------- &eAide de KléberCraft &8- &eStaff &8----------"
+            json("%player%", "&7» Commandes de &9modération||cmd:/help modo||ttp:&fClique pour afficher les commandes.")
+            json("%player%", "&7» Commandes de &2builder||cmd:/help builder||ttp:&fClique pour afficher les commandes.")
+            json("%player%", "&e/afk &7» &fActiver le mode AFK||sgt:/afk||ttp:&f/afk")
+         if arg 1 is "modo":
+            send "&8---------- &eAide de KléberCraft &8- &9Modération &8----------"
+            json("%player%", "&9/mute &7» &fMuter un joueur||sgt:/mute ||ttp:&f/mute <pseudo> <temps en minutes>")
+            json("%player%", "&9/unmute &7» &fUnmute un joueur||sgt:/unmute ||ttp:&f/unmute <pseudo>")
+            json("%player%", "&9/freeze &7» &fFreeze / geler un joueur||sgt:/freeze ||ttp:&f/freeze <pseudo>")
+            json("%player%", "&9/unfreeze &7» &fUnfreeze / dégeler un joueur||sgt:/unfreeze ||ttp:&f/unfreeze <pseudo>")
+            json("%player%", "&9/warn &7» &fEnvoyer un avertissement||sgt:/warn ||ttp:&f/warn <pseudo> <raison>")
+            json("%player%", "&9/kick &7» &fKick un joueur||sgt:/kick ||ttp:&f/kick <pseudo> <raison>")
+            json("%player%", "&9/tempban &7» &fBan temporairement un joueur||sgt:/tempban ||ttp:&f/tempban <pseudo> <temps en jours> <raison>")
+            json("%player%", "&9/ban &7» &fBan un joueur||sgt:/ban ||ttp:&f/ban <pseudo> <raison>")
+            json("%player%", "&9/unban &7» &fUnban un joueur||sgt:/unban ||ttp:&f/unban <pseudo>")
+         if arg 1 is "builder":
+            send "&8---------- &eAide de KléberCraft &8- &2Builder &8----------"
+            json("%player%", "&2WorldEdit &7» &fPlugin||cmd:/worldedit help||ttp:&fAide de WorldEdit")
+            json("%player%", "&2/head &7» &fGive une tête||sgt:/head ||ttp:&f/head <pseudo>")
+      else:
+         send "&8---------- &eAide de KléberCraft &8----------"
+         json("%player%", "&e/hub &7» &fRetourne au hub.||cmd:/hub||ttp:&fClique pour y aller.")
+Command /clochelol:
+   trigger:
+      set block at location at 99858, 64, 999799 in world "minigames" to air
+
+#on place:
+ #  if block is basalt:
+ #     make server execute command "ban %player% basalte enculé"
+
+Command /mst:
+   trigger:
+      send "&cBravo tu as choppé une MST !"
+      
+command /regenworlds:
+   trigger:
+      make console execute command "mv clone minigames jeux1"
+      make console execute command "mv clone minigames jeux2"
+	  
+	  
+command /testbgcord:
+   trigger:
+      make redisbungee execute proxy command test on JEUX3
