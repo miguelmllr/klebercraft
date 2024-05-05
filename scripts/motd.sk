@@ -1,0 +1,65 @@
+on server ping:
+   reset server-icon
+   set motd to " %{motd}%"
+   if {maintenance} is "on":
+      set version string to "Fermé"
+      set server-icon to file "icons/maintenance.png"
+   if {event} is "on":
+      set server-icon to file "icons/event.png"
+
+command /motd [<text>] [<text>] [<text>]:
+   permission: kc.motd
+   trigger:
+      if arg 1 is "basic":
+         set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&5              Hunger Games &7- &cMurder &7- &eHide And Seek &7- &3BedWars..."
+         set {spawn} to ""
+         set {event} to "off"
+         send "&2&l[MOTD] &aMOTD changé"
+      if arg 1 is "loupgarou":
+         if arg 2 is set:
+            set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&f&l               Event &c&lLoup-Garou &f&l%arg-3% &f&là %arg-2% heures !"
+            set {spawn} to "Event &c&lLoup-Garou &f&l%arg-3% a %arg-2% heures !"
+            send "&2&l[MOTD] &aMOTD changé"
+         else:
+            set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&f&l                    Event &c&lLoup-Garou &f&len cours !"
+            set {spawn} to "Event &c&lLoup-Garou &f&len cours !"
+            set {event} to "on"
+            send "&2&l[MOTD] &aMOTD changé"
+      if arg 1 is "minijeux":
+         if arg 2 is set:
+            set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&f&l                Event &9&lMini-Jeux &f&l%arg-3% &f&là %arg-2% heures !"
+            set {spawn} to "Event &9&lMini-Jeux &f&l%arg-3% a %arg-2% heures !"
+            send "&2&l[MOTD] &aMOTD changé"
+         else:
+            set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&f&l                      Event &9&lMini-Jeux &f&len cours !"
+            set {spawn} to "Event &9&lMini-Jeux &f&len cours !"
+            set {event} to "on"
+            send "&2&l[MOTD] &aMOTD changé"
+
+command /maintenance [<text>]:
+   permission: kc.dev
+   trigger:
+      if arg 1 is "on":
+         set {motd} to "              &c&lMAINTENANCE EN COURS"
+         make console execute command "whitelist on"
+         set {maintenance} to "on"
+         send "&cMaintenance activée"
+         set {spawn} to "&4&lMAINTENANCE"
+         loop all players:
+            if name of loop-player is not "MigMul":
+               kick loop-player due to "&cLe serveur entre en maintenance."
+      if arg 1 is "off":
+         set {motd} to "        &6&k! &6Bienvenue sur &eKleberCraft &a&lBÊTA &6&k!&5              Hunger Games &7- &cMurder &7- &eHide And Seek &7- &3BedWars..."
+         make console execute command "whitelist off"
+         set {maintenance} to "off"
+         send "&cMaintenance désactivée, reload lancé."
+         set {spawn} to ""
+         make console execute command "reload confirm"
+on join:
+   if name of player is "MigMul":
+      stop
+   else:
+      if {maintenance} is "on":
+         kick the player due to "Maintenance en cours."
+      else:
+         stop
