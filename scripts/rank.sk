@@ -1,0 +1,217 @@
+options:
+   # HEADER
+   hadmin: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%&7&lTPS: &f%{tps}% &7&lRAM: &f%{usememory}%&7/&f%{maxmemory}%&7 Go%nl%&7&lPing: %{ping}%%nl%-------
+   hfondateur: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%&7&lTPS: &f&l%{tps}%%nl%-------
+   hbuilder: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%-------
+   hmoderateur: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%-------
+   hami: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%-------
+   hdefault: &6&l&k$ &e&lKléberCraft &6&l&k$%nl%&7Joueurs connectés : &f%{nbjoueurs}%%nl%-------
+   # FOOTER
+   footer: &7-------%nl%&ekleber&f.&ecraft&f.&egg
+   # DISCORD
+   bot : KléberCraft
+   token : TOKEN_DISCORD
+   annonce-events : CHANNEL_DISCORD
+
+on load: #Mise en place des nametags
+   create nametag "a-admin"
+   set prefix of nametag "a-admin" to "&4Admin. "
+   create nametag "b-fonda"
+   set prefix of nametag "b-fonda" to "&cFonda. "
+   create nametag "c-builder"
+   set prefix of nametag "c-builder" to "&2Builder "
+   create nametag "d-modo"
+   set prefix of nametag "d-modo" to "&9Modo. "
+   create nametag "e-ami"
+   set prefix of nametag "e-ami" to "&6Ami "
+   create nametag "f-vip"
+   set prefix of nametag "f-vip" to "&eVIP "
+   login to "{@token}" with name "{@bot}"
+
+function refresh(n: number): #Fonction pour TAB + prefix TCHAT
+   loop all players:
+      set {nbjoueurs} to amount of all players
+      set {_tps} to tps from last 1 m
+      if {_tps} is between 0 and 10:
+         set {tps} to "&c%{_tps}%"
+      if {_tps} is between 11 and 14:
+         set {tps} to "&6%{_tps}%"
+      if {_tps} is between 15 and 18:
+         set {tps} to "&e%{_tps}%"
+      if {_tps} is between 19 and 20:
+         set {tps} to "&a%{_tps}%"
+      set {_freememory} to free memory
+      set {_maxmemory} to max memory
+      set {usememory} to {_freememory}/1000
+      set {maxmemory} to {_maxmemory}/1000
+      set {ping} to loop-player's ping
+      if loop-player has permission "kc.admin":
+         set loop-player's tab list header to "{@hadmin}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&4[Administrateur] %loop-player%"
+      else if loop-player has permission "kc.fondateur":
+         set loop-player's tab list header to "{@hfondateur}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&c[Fondateur] %loop-player%"
+      else if loop-player has permission "kc.builder":
+         set loop-player's tab list header to "{@hbuilder}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&2[Builder] %loop-player%"
+      else if loop-player has permission "kc.moderateur":
+         set loop-player's tab list header to "{@hmoderateur}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&9[Modérateur] %loop-player%"
+      else if loop-player has permission "kc.ami":
+         set loop-player's tab list header to "{@hami}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&6[Ami] %loop-player%"
+      else if loop-player has permission "kc.vip":
+         set loop-player's tab list header to "{@hdefault}"
+         set loop-player's tab list footer to "{@footer}"
+         if {afk.%loop-player%} is 0:
+            set the loop-player's tablist name to "&e[VIP] %loop-player%"
+      else:
+         set loop-player's tab list header to "{@hdefault}"
+         set loop-player's tab list footer to "{@footer}"
+         set the loop-player's tablist name to "&7%loop-player%"
+      if {nbjoueurs} is "0":
+         mark "{@bot}" as playing "rien"
+      else:
+         if {nbjoueurs} is smaller than 2:
+            mark "{@bot}" as playing "MC - %{nbjoueurs}% joueur connecté"
+         else:
+            mark "{@bot}" as playing "MC - %{nbjoueurs}% joueurs connectés"
+ 
+every second:
+   set {nbjoueurs} to amount of all players
+   if {nbjoueurs} is "0":
+      mark "{@bot}" as playing "MC"
+   else:
+      refresh(1)
+
+command /tagreload: #Fin Murder
+   trigger:
+      loop all players:
+         if loop-player has permission "kc.admin":
+            add loop-player to nametag "a-admin"
+         else if loop-player has permission "kc.fondateur":
+            add loop-player to nametag "b-fonda"
+         else if loop-player has permission "kc.builder":
+            add loop-player to nametag "c-builder"
+         else if loop-player has permission "kc.moderateur":
+            add loop-player to nametag "d-modo"
+         else if loop-player has permission "kc.ami":
+            add loop-player to nametag "e-ami"
+         else if loop-player has permission "kc.vip":
+            add loop-player to nametag "f-vip"
+
+on chat: #Mise en forme tchat
+   if {mute.%player%} is true:
+      cancel event
+      send "&cTu es réduit au silence pour %{tmute.%player%}% &cminutes."
+   else:
+      if player has permission "kc.admin":
+         cancel event
+         broadcast "&8[&4Admin.&8] &4&l%player% &8» &f%message%"
+         stop
+      else if player has permission "kc.fondateur":
+         cancel event
+         broadcast "&8[&cFonda.&8] &c&l%player% &8» &f%message%"
+         stop
+      else if player has permission "kc.builder":
+         cancel event
+         broadcast "&8[&2Builder&8] &2%player% &8» &f%message%"
+         stop
+      else if player has permission "kc.moderateur":
+         cancel event
+         broadcast "&8[&9Modo.&8] &9%player% &8» &f%message%"
+         stop
+      else if player has permission "kc.ami":
+         cancel event
+         broadcast "&8[&6Ami&8] &6%player% &8» &f%message%"
+         stop
+      else if player has permission "kc.vip":
+         cancel event
+         broadcast "&8[&eVIP&8] &e%player% &8» &f%message%"
+         stop
+      else:
+         cancel event
+         broadcast "&7%player% &8» &7%message%"
+         stop
+
+on join:
+   if {tban.%player%.true} is true:
+      kick player due to "&cTu as été ban pour &4&l%{tempban.%player%}% jours&c&l le %{date.tban.%player%}%&c&l.%nl%&4&lRaison : %{raison.tban.%player%}%"
+      set join message to ""
+   if {ban.%player%} is true:
+      kick player due to "&c&lTu es ban.%nl%&cRaison : %{raison.%player%}%"
+      set join message to ""
+   else:
+      refresh(1)
+      set {afk.%event-player%} to 0
+      if player has permission "kc.admin":
+         set join message to "&8[&a+&8] &4[Admin.] &7%player%"
+         add player to nametag "a-admin"
+      else if player has permission "kc.fondateur":
+         set join message to "&8[&a+&8] &c[Fonda.] &7%player%"
+         add player to nametag "b-fonda"
+      else if player has permission "kc.builder":
+         set join message to "&8[&a+&8] &2[Builder] &7%player%"
+         add player to nametag "c-builder"
+      else if player has permission "kc.moderateur":
+         set join message to "&8[&a+&8] &9[Modo.] &7%player%"
+         add player to nametag "d-modo"
+      else if player has permission "kc.ami":
+         set join message to "&8[&a+&8] &6[Ami] &7%player%"
+         add player to nametag "e-ami"
+      else if player has permission "kc.vip":
+         set join message to "&8[&a+&8] &e[VIP] &7%player%"
+         add player to nametag "f-vip"
+      else:
+         set join message to "&8[&a+&8] &7%player%"
+
+on quit:
+   set quit message to "&8[&c-&8] %player%"
+   if {nbjoueurs} is "0":
+      mark "{@bot}" as playing "MC"
+
+# AFK
+command /afk:
+   permission: kc.staff
+   permission message: &4[&cKléberCraft&4] &cTu n'as pas la permission !
+   trigger:
+      if {afk.%player%} is 0:
+         set {afk.%player%} to 1
+         set the player's tablist name to "&8[AFK] %player%"
+         send "&7[&eKléberCraft&7] Tu es désormais &8AFK&7."
+      else if {afk.%player%} is 1:
+         set {afk.%player%} to 0
+         send "&7[&eKléberCraft&7] Tu n'es plus &8AFK&7."
+on any movement:
+   if {afk.%event-player%} is 1:
+      set {afk.%event-player%} to 0
+      send "&7[&eKléberCraft&7] Tu n'es plus &8AFK&7."
+      refresh(1)
+on chat:
+   if {afk.%event-player%} is 1:
+      set {afk.%event-player%} to 0
+      send "&7[&eKléberCraft&7] Tu n'es plus &8AFK&7."
+      refresh(1)
+on quit:
+   if {afk.%event-player%} is 1:
+      set {afk.%event-player%} to 0
+#/ AFK
+
+
+command /nbjoueurs:
+   trigger:
+      send "%amount of all players%"
+      
+command /refresh:
+   trigger:
+      refresh(1)
