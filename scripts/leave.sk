@@ -1,0 +1,15 @@
+command /leave:
+   aliases: /quit
+   trigger:
+      make player execute command "racing leave"
+      make player execute command "bw leave"
+      make player execute command "has leave"
+      make player execute command "bb leave"
+      make player execute command "mm leave"
+      make player execute command "spleef leave"
+      make player execute command "hg leave"
+      make player execute command "vd leave"
+      loop 300 times:
+         send " "
+      send "&7[&eKléberCraft&7] Tu as quitté la partie."
+      teleport player to location at 160.5, 63, -275.5 in world "minigames"
